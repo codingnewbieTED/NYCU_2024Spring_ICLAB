@@ -77,7 +77,7 @@ int main() {
             std::vector<std::string> tran;
 
 
-            if (number_line <= 45)        outFile3 << 0 << " " << input.length() << " ";
+            if (number_line <= 100)        outFile3 << 0 << " " << input.length() << " ";
             else outFile3 << 1 << " " << input.length() << " ";
 
             for (char c : input) { // 遍歷 input 中的每個字符
@@ -86,7 +86,7 @@ int main() {
             }
 
             // 將tran寫入檔案 input_str or output_str
-            if (number_line <= 45) {
+            if (number_line <= 100) {
                 for (const std::string& num : tran) {
                     outFile3 << num << " ";
                 }
@@ -120,7 +120,7 @@ int main() {
                     }
                 }
 
-                if (number_line <= 45)            outFile4 << temp_A_rev << " ";
+                if (number_line <= 100)            outFile4 << temp_A_rev << " ";
                 else  outFile3 << temp_A_rev << " ";
 
                 //shift A
