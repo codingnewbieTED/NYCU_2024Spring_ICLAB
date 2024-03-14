@@ -12,8 +12,8 @@
 //
 //   File Name   : ENIGMA.v
 //   Module Name : ENIGMA
-//   Release version : V3.0 (Release Date: 2024-02)   157285.497937    140560.360673  122697.589481 119933.353907  119860.173100 119640.630808 119351.234076
-//
+//   Release version : V3.0 (Release Date: 2024-02)   157285.497937    140560.360673  122697.589481 119933.353907  119860.173100 119640.630808 119351.234076 11680.8
+// 
 //                                                    拔rst_n          拔A_inv         拔B_inv       control    
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //############################################################################
@@ -58,7 +58,7 @@ module ENIGMA (
     reg mode;
     wire n_mode;
     reg [5:0] A_rot[0:127];
-    reg [5:0] B_rot[0:63];
+    //reg [5:0] B_rot[0:63];
     reg [2:0] B_pos[0:7];
     reg [2:0] n_B_pos[0:7];
 
@@ -67,7 +67,8 @@ module ENIGMA (
     wire [6:0] in_B;
     reg [2:0] in_A_inv_column;
     wire [5:0] in_A_inv;
-    wire [5:0] out_A, out_B, out_reflect, out_A_inv; 
+    wire [5:0] out_reflect, out_A_inv; 
+	reg [5:0] out_A,out_B;
     reg [5:0] out_B_inv;
     reg [5:0] shift_right;
     wire [1:0] n_shift_right;
@@ -82,11 +83,43 @@ module ENIGMA (
     //  PREOUTPUT//latency 1
     //================================================================
     // A
-    assign out_A = A_rot[{1'd0,in_string}];   
+    //assign out_A = A_rot[{1'd0,in_string}];   
     // B
+	always@(*)begin
+		if(in_string[5:3]==0)  out_A = A_rot[{1'd0,3'd0,in_string[2:0]}];
+		else if(in_string[5:3]==1)  out_A = A_rot[{1'd0,3'd1,in_string[2:0]}];
+		else if(in_string[5:3]==2)  out_A = A_rot[{1'd0,3'd2,in_string[2:0]}];	
+		else if(in_string[5:3]==3)  out_A = A_rot[{1'd0,3'd3,in_string[2:0]}];
+		else if(in_string[5:3]==4)  out_A = A_rot[{1'd0,3'd4,in_string[2:0]}];
+		else if(in_string[5:3]==5)  out_A = A_rot[{1'd0,3'd5,in_string[2:0]}];
+		else if(in_string[5:3]==6)  out_A = A_rot[{1'd0,3'd6,in_string[2:0]}];
+		else out_A = A_rot[{1'd0,3'd7,in_string[2:0]}];
+	end
     assign in_B_column =  B_pos[out_A[2:0]]; //B_pos[in_string[2:0]];
-    assign in_B = {1'd1,out_A[5:3],in_B_column};//{in_string[5:3],in_B_column};
-    assign out_B = A_rot[in_B];
+	/*
+	always@(*)begin
+		if(out_A[2:0]==0)  in_B_column = B_pos[0];
+		else if(out_A[2:0]==1)  in_B_column = B_pos[1];
+		else if(out_A[2:0]==2)  in_B_column = B_pos[2];
+		else if(out_A[2:0]==3)  in_B_column = B_pos[3];
+		else if(out_A[2:0]==4)  in_B_column = B_pos[4];
+		else if(out_A[2:0]==5)  in_B_column =  B_pos[5];
+		else if(out_A[2:0]==6)  in_B_column = B_pos[6];
+		else in_B_column = B_pos[7];
+	end*/
+    //assign in_B = {1'd1,out_A[5:3],in_B_column};//{in_string[5:3],in_B_column};
+    //assign out_B = A_rot[in_B];
+	always@(*)begin
+		if(out_A[5:3]==0)  out_B = A_rot[{1'd1,3'd0,in_B_column[2:0]}];
+		else if(out_A[5:3]==1)  out_B = A_rot[{1'd1,3'd1,in_B_column[2:0]}];
+		else if(out_A[5:3]==2)  out_B = A_rot[{1'd1,3'd2,in_B_column[2:0]}];	
+		else if(out_A[5:3]==3)  out_B = A_rot[{1'd1,3'd3,in_B_column[2:0]}];
+		else if(out_A[5:3]==4)  out_B = A_rot[{1'd1,3'd4,in_B_column[2:0]}];
+		else if(out_A[5:3]==5)  out_B = A_rot[{1'd1,3'd5,in_B_column[2:0]}];
+		else if(out_A[5:3]==6)  out_B = A_rot[{1'd1,3'd6,in_B_column[2:0]}];
+		else out_B = A_rot[{1'd1,3'd7,in_B_column[2:0]}];
+	end
+
     // reflector
     assign out_reflect = ~(out_B);
     //B_inv
@@ -513,6 +546,5 @@ module ENIGMA (
 
 
 endmodule
-
 
 
