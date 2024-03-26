@@ -9,7 +9,7 @@
 2.開excel表，window的九個元素很好找且規律，控制訊號用一個cnt即可完成  
 3.16個輸入，9級乘加，第一個output第10個cycle就跑出來，請用linebuffer keep住他再丟回去加  
 4.norm & activation 都需要+(-)和除法，可以共用  
-5.pipeline切平均一點:   mux + * |  exp  | div   
+5.pipeline切平均一點:  1cycle: (mux + *),(  exp  ) ,( div )   
 
 心得: 題目不難，先想好架構、mux元素怎麼給順著cnt做就能刻得出來，週四上午考完計組後，晚上完成。  
 這次LAB還跟隊友傻傻  的刻pattern，結果群組有好心學長幫寫，周五加自己的pattern總共跑了四個pattern XD  
