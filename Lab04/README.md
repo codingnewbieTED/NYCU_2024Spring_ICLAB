@@ -3,8 +3,9 @@
 題目:  給定三張4*4 Img並對其做zero/replicate padding，分別對三張3*3KERNEL做CONVOLUTION後  
 相加，2*2maxpooling後再對2*2舉證做舉證相乘，再來normalization和activation function後依序  
 輸出四個元素。  
-|--|
+
 解題思路:  切pipeline可以開excel模擬一下每個stage在每一cycle時要輸入什麼元素。  
+|--|
 1.我發現4*4IMG，padding後再做3*3捲積，還是4*4  
 2.開excel表，window的九個元素很好找且規律，控制訊號用一個cnt即可完成  
 3.16個輸入，9級乘加，第一個output第10個cycle就跑出來，請用linebuffer keep住他再丟回去加  
