@@ -8,6 +8,7 @@
 | 備註  |1DE |1DE|1DE|1DE|NE -5||||||
 | percent%|5|5|5|5|5|5|8|5|8|
 |  下半學期    | Lab07  | Lab08 | Lab09 | Lab10 | Lab11 | Lab12 | LAB13|   FINAL PROJECT  | FINAL EXMA |
+|||||||||||||
 | Difficulty  ||||||||||||
 | Rank        ||||||||||||
 | Score       ||||||||||||
