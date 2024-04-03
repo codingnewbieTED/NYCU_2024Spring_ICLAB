@@ -13,4 +13,6 @@
 5.pipeline切平均一點:  1cycle: (mux + *),(  exp  ) ,( div )   
 
 心得: 題目不難，先想好架構、mux元素怎麼給順著cnt做就能刻得出來，週四上午考完計組後，晚上完成。  
-這次LAB還跟隊友傻傻  的刻pattern，結果群組有好心學長幫寫，周五加自己的pattern總共跑了四個pattern XD  
+這次LAB還跟隊友傻傻  的刻pattern，結果群組有好心學長幫寫，周五加自己的pattern總共跑了四個pattern XD    
+然後可以再把conv的兩個加法器與norm/activation共用的加法器，進一步再共用，可以用七個加法器就好，交    
+出去才想到。
