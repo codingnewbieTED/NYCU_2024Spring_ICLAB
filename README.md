@@ -17,7 +17,8 @@ ICLAB117
 | 備註  ||||||||||||
 | percent(%)|5|5|5|3|5|5|5|8|8|
 
-備[1]:感謝LAB5廖助教，因為我.v和.db SRAM命名不一樣導致02合成SCRIPT吃不到db黨，無法合成差點2DE，最後算NAMMING ERROR 只扣5分，謝謝~      
+備[1]:    
+感謝LAB5廖助教，因為我.v和.db SRAM命名不一樣導致02合成SCRIPT吃不到db黨，無法合成差點2DE，最後算NAMING ERROR只扣5分，謝謝~      
 
 
 github README寫法:https://gist.github.com/billy3321/1001749662c370887c63bb30f26c9e6e    
