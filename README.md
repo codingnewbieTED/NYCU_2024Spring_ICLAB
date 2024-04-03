@@ -1,13 +1,13 @@
 # NYCU_2024Spring_ICLAB
 
-|             | Lab01  | Lab02 | Lab03 | Lab04 | Lab05 | Lab06 |上機考 |    MIDTERM PROJECT | MID EXAM |
+|  上半學期    | Lab01  | Lab02 | Lab03 | Lab04 | Lab05 | Lab06 |上機考 |    MIDTERM PROJECT | MID EXAM |
 | ------------|:------:|:-----:|:-----:|:-----:|:-----:|:-----:|:--------------:|:-----:|:-------:|
 | Difficulty  |  1/5   |  1/5  |2/5|3/5|4/5||||||
 | Rank        |  3/114 | 5/109   ||1/95|8/73||||||
 | Score       |  99.47 |   98.9 |100|100|92.12||||||
 | 備註  |1DE |1DE|1DE|1DE|NE -5||||||
 | percent%|5|5|5|5|5|5|8|5|8|
-|             | Lab07  | Lab08 | Lab09 | Lab10 | Lab11 | Lab12 | LAB13|   FINAL PROJECT  | FINAL EXMA |
+|  下半學期    | Lab07  | Lab08 | Lab09 | Lab10 | Lab11 | Lab12 | LAB13|   FINAL PROJECT  | FINAL EXMA |
 | Difficulty  ||||||||||||
 | Rank        ||||||||||||
 | Score       ||||||||||||
