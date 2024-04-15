@@ -7,7 +7,7 @@ PREFIX & INFIX
 心得:   
 1.
 習慣很可怕，不要依賴SPEC的OUTPUT大小去無腦開REG，結果這次兩個MODE，95是MODE2需要的，    
-mode1根本不需要開那麼大，開95就是一個大陷阱直接讓你不能合成
+mode1根本不需要開那麼大，開95就是一個大陷阱直接讓你不能合成    
 2.    
 最近題目都可資料結構? 說好的IP、三角形呢? 去年是stack判斷能不能排序成功，今年是兩個mode
 一個是+-*/ 後兩位數字 共9個operator 10個operand。 mode2是根據給定的演算法，push pop stack
