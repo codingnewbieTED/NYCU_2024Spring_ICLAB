@@ -1,6 +1,7 @@
+大局關: pattern測design正確性， assertion + cover測pattern訊號的正確性與品質(覆蓋率)            
 題目: 寫checker分析pattern的coverage和訊號是否符合依寫規定(assertion)。     
       part1:寫cover測助教pattern並達到100%    
-      part2:寫assertion測助教有問題的design，找地錯誤的地方(很像之前的lab03)       
+      part2:寫assertion測助教有問題的design，找他錯誤的地方(很像之前的lab03)       
       part3:自己的cover + pattern測performance    
     
 
