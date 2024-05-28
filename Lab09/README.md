@@ -14,4 +14,5 @@
          但是!    
         always@(..)   if(..) assert (property...)  $fatal 錯誤， 加一個else 接 fatal就沒問題，不能直接放在assert後面        
 
-可以去看checker最下面debug那邊，有點不知道為什麼，反正有問題就換個寫法A看看，畢竟大家都是第一次寫assertion:D    
+可以去看checker最下面debug那邊，有點不知道為什麼，反正有問題就換個寫法A看看，畢竟大家都是第一次寫assertion           
+imc可以開啟來玩玩看，看到coverbin 都是滿的有種舒暢的感覺:D            
