@@ -11,20 +11,20 @@
       丟到bridge，減少面積會在這次LAB得到較好的performance。OOP主要在資料的管理宣告上，並不會用到其他如多型、繼承    
       等概念，SV主要還是用在pattern上比較常用，如下:
 
-class random_supply;
-    randc ING black_supply;
-    randc ING green_supply;
-    randc ING milk_supply;
-    randc ING pineapple_supply;
-    constraint limit1{
-        black_supply inside{[0:4095]};
-        green_supply inside{[0:4095]};
-        milk_supply  inside{[0:4095]};
-        pineapple_supply inside{[0:4095]};
-    }
+class random_supply;          
+    randc ING black_supply;          
+    randc ING green_supply;          
+    randc ING milk_supply;          
+    randc ING pineapple_supply;          
+    constraint limit1{          
+        black_supply inside{[0:4095]};          
+        green_supply inside{[0:4095]};          
+        milk_supply  inside{[0:4095]};          
+        pineapple_supply inside{[0:4095]};          
+    }          
 endclass
-random_supply IND_supply = new();
-IND_supply.randomize();
+random_supply IND_supply = new();          
+IND_supply.randomize();          
 
 
 
