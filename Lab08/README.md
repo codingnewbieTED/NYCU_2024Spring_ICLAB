@@ -9,7 +9,7 @@
 
 心得: 感覺latency的優化會被DRAM的讀取時間吃掉，所以我的方向感覺得不到什麼好處，反而是照去年的bestcode把所有運算    
       丟到bridge，減少面積會在這次LAB得到較好的performance。OOP主要在資料的管理宣告上，並不會用到其他如多型、繼承    
-      等概念，SV主要還是用在pattern上比較常用，如下:
+      等概念。  SV主要還是用在pattern上比較常用，stimulus class寫法如下:
 
      class random_supply;          
          randc ING black_supply;          
@@ -23,8 +23,8 @@
              pineapple_supply inside{[0:4095]};          
          }          
      endclass
-     random_supply IND_supply = new();          
-     IND_supply.randomize();          
+     random_supply IND_supply = new();       //instance ,類似C指標new一個記憶體位置叫IND_supply          
+     IND_supply.randomize();                 //access 內建成員函式，產生隨機成員變數
 
 
 
