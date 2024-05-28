@@ -10,7 +10,8 @@
       
 心得: covergroup蠻好寫的，用coverpoint指定要追蹤的訊號+bin紀錄觸發的條件。 但assertion我覺得有點小難，有寫看似相同的寫法可能會有不一樣的結果:    
 1.      ##1 和 |=> 有些情況不會依樣。    
-2.      always@(..)     assert (property...)  $fatal 沒問題。但是!    
-        always@(..)   if(..) assert (property...)  $fatal 爆炸， 加一個else 接 fatal就沒問題，不能直接放在assert後面        
+2.      always@(..)     assert (property...)  $fatal 沒問題。
+         但是!    
+        always@(..)   if(..) assert (property...)  $fatal 錯誤， 加一個else 接 fatal就沒問題，不能直接放在assert後面        
 
 可以去看checker最下面debug那邊，有點不知道為什麼，反正有問題就換個寫法A看看，畢竟大家都是第一次寫assertion:D    
