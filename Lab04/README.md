@@ -17,7 +17,11 @@
 2.FP的IP面積都很肥，想盡辦法去共用，讓面積縮小。   (MY: 加減法*12,mult*10,exp*1,div*1,ln*1)
 
 心得:    
-題目不難，先想好架構、mux元素怎麼給順著cnt做就能刻得出來，週四上午考完計組後，晚上完成。  
-這次LAB還跟隊友傻傻  的刻pattern，結果群組有好心學長幫寫，周五加自己的pattern總共跑了四個pattern XD    
+先想好pipeline scheduling，然後順著cnt把每一cycle該做的是選好。  
+這次LAB還跟隊友傻傻的刻pattern，結果群組有好心學長幫寫，周五加自己的pattern總共跑了四個pattern XD    
 然後可以再把conv的兩個加法器與norm/activation共用的加法器，進一步再共用，可以用10個加法器就好，交    
 出去才想到。
+
+後記:  這個best code偏水，這次lab只跟上學期有些許不同，我上學期就用Dic的帳號練過這題，並且用兩天晚上    
+把薛同學的best code 完全理解，因次這次lab的scheduling基本都跟他一樣。我只能說助教沒抓我抄襲，要馬moss    
+分數差一點，要馬看在我用自己的方式實現，我沒有邊開之前的code邊打我的design，那違反我的良心。
