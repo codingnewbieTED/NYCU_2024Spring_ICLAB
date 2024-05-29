@@ -2,7 +2,7 @@
 
 題目: 寫checker分析pattern的coverage和訊號是否符合依寫規定(assertion)。     
       part1:寫cover測助教pattern並達到100%    
-      part2:寫assertion測助教有問題的design，找他錯誤的地方(很像之前的lab03)       
+      part2:寫assertion測助教有問題的pattern&design，找他錯誤的地方(很像之前的lab03)       
       part3:自己的cover + pattern測performance    
     
 
@@ -10,7 +10,7 @@
       沒什麼技巧，找出最難達成的coverbin(這次好像是size & 飲料-->size & 飲料的變化次數)，並直接手動去餵測資(有點像是在考排列組合:D)，其他的cover都蠻容易達到。     
       最終: 2400個make drink，600個supply,600個check date，分別交叉給(因為有mode-->mode的transition)，make drink的bev_type+bev_size也要交叉給，errormsg可以用rand硬A    
       
-心得: covergroup蠻好寫的，用coverpoint指定要追蹤的訊號+bin紀錄觸發的條件。 但assertion我覺得有點小難，有寫看似相同的寫法可能會有不一樣的結果:    
+心得: covergroup蠻好寫的，用coverpoint指定要追蹤的訊號+bin紀錄觸發的條件。 但assertion我覺得有點小難，有些看似相同的寫法可能會有不一樣的結果:    
 1.      ##1 和 |=> 有些情況不會依樣。    
 2.      always@(..)     assert (property...)  $fatal 沒問題。
          但是!    
