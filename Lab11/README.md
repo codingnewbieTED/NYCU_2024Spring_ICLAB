@@ -27,7 +27,8 @@ wocg跟 withg的FF條件長不一樣(其實是一樣，只是移到sleep-ctrl那
 2. 理論上有按照第一點02SEC就會過，若還是沒勾勾，可考慮針對JG作小手段，如in_valid沒有連續72cycle我就給你output0、或進入一個deadlock的state,這能讓tool一秒瞬間02 SEC proof 。
 
 延伸思考: invalid不是連續的設計，需要每個DFF都加上invalid條件，不要讓上一階段算完的值一直往下流。
-![Uploading 螢幕擷取畫面 2024-06-09 021400.png…]()
 
 
+
+![螢幕擷取畫面 2024-06-09 021400](https://github.com/codingnewbieTED/NYCU_2024Spring_ICLAB/assets/152285982/e9d739d6-fff3-4d94-8568-13eccbe7bdb2)
 
