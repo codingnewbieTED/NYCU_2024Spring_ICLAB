@@ -1,5 +1,8 @@
 題目: APR lab05
 
-流程: 
+流程:     
 floorplan: specify floorplan, 拉macro, edit halo(避免place 或 route離macro太近造成問題)    
-powerplan: global:VDDVCC + powerring + special route(connect power pad and ring) + strip + cell power grid    
+powerplan: global:VDDVCC + powerring + special route(connect power pad and ring) + strip + cell power grid   
+                DRC,LVS      
+placement: specify not on M2,M3 layer . placement   
+preCTS timing, clock tree synthesis
