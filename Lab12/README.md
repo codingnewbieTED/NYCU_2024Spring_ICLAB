@@ -13,4 +13,8 @@
 1. 拉marco，若有兩個以上，左右對齊之後LVS比較不會有問題
 2. prects timing有violation沒差，postCTS為0就好
 3. nanoroute有DRC直接nanoroute重點一次
-4. FINAL遇到的問題，第六步加filler後有DRC(每個cell有METAL1 short)，右邊把metal1顯示出來，其他layer隱藏，閃掉short的M1，delete filler(在add filler下面)，重繞+ECO timing，SI後再加filler就沒問題
+4. FINAL遇到的問題，第六步加filler後有DRC(某個cell有METAL1 short)，右邊把metal1顯示出來，其他layer隱藏，刪掉short的M1，delete filler(在add filler下面)，重繞，SI+ECO timing再加filler就沒問題
+
+預告:   
+之後的lab(12 13 final)都要一直跑這個，先熟悉有利後續使用。 這個Lab接到SRAM的indata都經過reg比較沒問題，我final遇到直接把MUX的input(rvalid from pseudoDRAM)接到SRAM發生06 timing violation，最終解法是
+DI(rdata),WEB全部都要經過FF避免06 timing的問題，有時候只靠redundant gate無法解決，也是一個大雷點(final 繞了七八次 06都爆炸，還是建議不要拿正緣變化Input直接進SRAM，負緣就沒差)
