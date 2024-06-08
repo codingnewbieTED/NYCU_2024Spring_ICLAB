@@ -6,7 +6,7 @@ low power SNN, 兩張 6X6矩陣conv後4*4 -> quant1(/2295) -> maxpooling + FC ->
 2. Low power可以用一mask罩住要運算的時間，讓DFF和data只有在mask為1時變動，這樣很好達到FF + data gating (下圖)。
 3. 搶latency，因FC一次會算出兩個元素，要開兩個quant2，quant1一個就好。
 
-power心得: 講義上課都在講clock gating，但FF能省之外，不讓data跳來跳去也是一個很重要的方向。 最簡單的例子，MUX選元素丟到*+/中做運算，    
+power心得: 講義上課都在講clock gating，但FF能省之外，不讓data跳來跳去也是一個很重要的方向。 最簡單的例子，MUX選元素丟到*+/中做運算，
 算完後把MUX固定就可以讓所有後續datapath保持不動，這個比FFgating更重要! 然後很推薦利用gating window控制gating的時間。
 
 JG SEC DEBUG:     
