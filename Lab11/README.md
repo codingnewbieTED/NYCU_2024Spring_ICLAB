@@ -11,8 +11,7 @@ power心得: 講義上課都在講clock gating，但FF能省之外，不讓data�
 
 JG SEC DEBUG:     
 這邊偷教大家，最極致的做法可以把有gating FF裡面的if else都拔掉，因為clock gating控制已經寫過一次了。缺點就是01 sec會跑超過12小時，因為    
-你有加without gating跟 with的FF條件長不一樣(其實一樣，只是移到sleep-ctrl那裏了)，但很笨proof不出問題又無法證明就卡在那邊。但助教說超過    
-12小是算個的。
+你有加without gating跟 with的FF條件長不一樣(其實是一樣，只是移到sleep-ctrl那裏了)，但很笨proof不出問題又無法證明就卡在那邊。
 
     GATED_OR GATED_CG_U04 (.CLOCK(clk), .SLEEP_CTRL((!(cnt_global == 29 )&& cg_en) ) , .RST_N(rst_n), .CLOCK_GATED(clk_g1_1));
     always@(posedge clk_g1_1)begin
@@ -21,6 +20,10 @@ JG SEC DEBUG:
     		encode_reg[1] <= encode_comb[1];
     	end
     end
+
+我自己個性還是求穩一點，一定要看到勾勾才安心，雖然助教說跑12小時沒出現問題就算過。 01:wocg,withg兩者只能有clk不一樣，01就會過。02這邊有兩個重點:       
+1. cnt要寫成invalid開始為1，cnt就一直加。因為JG給值部不是連續的，這導致條件如cnt==??要做...,因cnt沒繼續加導致要取的值跑掉了。若這個值落在沒gating的範圍不會引響，但若取到的值
+   是落在gating後的區段，阿這樣SEC就會說兩個design(cgen=1,cgen=0)不一樣。這超重要! JG input 不是連續，cnt要一值加!
 
 
 
