@@ -14,13 +14,13 @@ JG SEC DEBUG:
 你有加without gating跟 with的FF條件長不一樣(其實一樣，只是移到sleep-ctrl那裏了)，但很笨proof不出問題又無法證明就卡在那邊。但助教說超過    
 12小是算個的。
 
-  GATED_OR GATED_CG_U04 (.CLOCK(clk), .SLEEP_CTRL((!(cnt_global == 29 )&& cg_en) ) , .RST_N(rst_n), .CLOCK_GATED(clk_g1_1));
-  always@(posedge clk_g1_1)begin
-  	if(cnt_global == 29 ) begin   //把gating cell的 cg_en丟掉 ，就可以拔掉這個if else
-  		encode_reg[0] <= encode_comb[0];
-  		encode_reg[1] <= encode_comb[1];
-  	end
-  end
+    GATED_OR GATED_CG_U04 (.CLOCK(clk), .SLEEP_CTRL((!(cnt_global == 29 )&& cg_en) ) , .RST_N(rst_n), .CLOCK_GATED(clk_g1_1));
+    always@(posedge clk_g1_1)begin
+    	if(cnt_global == 29 ) begin   //把gating cell的 cg_en丟掉 ，就可以拔掉這個if else
+    		encode_reg[0] <= encode_comb[0];
+    		encode_reg[1] <= encode_comb[1];
+    	end
+    end
 
 
 
