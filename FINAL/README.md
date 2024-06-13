@@ -1,4 +1,4 @@
-題目: 單核CPU，支援的指令有:Rtype:+,-,*,less than. Itype: beq,store,load. Mtype: determinant.    
+題目: 單核CPU，支援的指令有:Rtype:+,-,*,less than. Itype: beq,store,load. Mtype: determinant. 因為PERF為(latency*cycle)^3*area_core，我M指令成法器開滿多的，結果M指令助教pattern只有26個==  
 
 架構: 一開始想學計組5stage pipeline的CPU，但想到要搞一堆stall,forward,flush,hazard detect等等，就卻步了。    
 乖乖一個一個instr用FSM去做就好，如此可以很簡單處理SRAM cache miss時的情況(當IF,Load時miss再去DRAM取就好)，    
