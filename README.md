@@ -1,7 +1,7 @@
 # NYCU_2024Spring_ICLAB     
 ICLAB117
 
-|  上半學期    | Lab01  | Lab02 | Lab03 | Lab04 | Lab05 | Lab06 |上機考 |    MIDTERM PROJECT | MID EXAM |
+|  上半學期    | Lab01  | Lab02 | Lab03 | Lab04 | Lab05 | Lab06 |OT |    MIDTERM PROJECT | MID EXAM |
 | ------------|:------:|:-----:|:-----:|:-----:|:-----:|:-----:|:--------------:|:-----:|:-------:|
 | Difficulty  |  1/5   |  1/5  |2/5|3/5|4/5|3/5|3/5|5/5|3/5||
 | Rank        |  3/114 | 5/109   ||1/95|8/73|13/99|NA|2/87|5/94||
