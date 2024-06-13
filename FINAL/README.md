@@ -14,7 +14,7 @@
 2. SRAM大小，我知道去年bestcode instr開256、data 128，但我不想再抄別人架構了，就開兩個128輕鬆寫，latency佛系了。
 3. 最極致的架構，MIPs 5stage CPU，要有hazard detect,forward,beq flush,cache miss時全部stall等等判定，甚至BHT、    
    Reservation center...，學的不少但不好寫。
-4. latency三次方阿，我犧牲面積去換那26個M指令，事後想想不絕對不賺。
+4. latency三次方阿，我犧牲面積去換那26個M指令，事後想想絕對不賺。
 
 APR: 我覺得這次反而花比較多時間在驗證(pattern真的好難寫)和APR上。APR做出來，06SRAM可能還是會有timing(hold)的問題，    
 因為DRAM給的值是正緣變化的，直接拿DRAM的值接進SRAM會有大問題，需要加DFF和redundant mux去解決。APR真的很難，ICLAB    
