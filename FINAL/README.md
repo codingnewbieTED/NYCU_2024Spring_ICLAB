@@ -6,12 +6,14 @@
 後就很簡單了。
 1.  想好SRAM size, 搞好DRAM寫到SRAM(跟MP差不多)
 2.  確定SRAM讀出來的instr,data是正確的
-3.  開始寫ALU(+-*<)，這部分比MP簡單很多，instr功能很單純
+3.  開始寫ALU(+-*<)，這部分比MP簡單很多，instr功能很單純(除了determinant:( )
 4.  寫回DRAM,SRAM,REG
 
 
 APR: 我覺得這次反而花比較多時間在驗證(pattern真的好難寫)和APR上。APR做出來，06SRAM可能還是會有timing(hold)的問題，    
-因為DRAM給的值是正緣變化的，直接拿DRAM的值接進SRAM後有大問題，需要加DFF和redundant mux去解決。APR真的很難，ICLAB    
+因為DRAM給的值是正緣變化的，直接拿DRAM的值接進SRAM會有大問題，需要加DFF和redundant mux去解決。APR真的很難，ICLAB    
 也沒有琢磨在這邊太多，大部分的人只會照講義flow一直A BUG。我聽說IC contest APR用ICLAB的script是跑不出來的、不然就是
-performance會跟02差很多，APR反而是很關鍵的一步，因ICLAB主要還是在教前端設計，這部分要靠自己再進修了。
+performance會跟02差很多，APR反而是很關鍵的一步，因ICLAB主要還是在教前端設計，這部分要靠自己再進修了。    
+
+在這邊恭喜自己FP 1DE結束整學期課程了~~~ 灑花
 
