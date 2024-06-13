@@ -1,0 +1,697 @@
+// ====================================================================================================
+// USER SPECIFIED PARAMETERS
+
+`define CYCLE_TIME 3.4
+
+// uncomment this to set program to bubblesort, otherwise program is randomly generated
+//`define BUBBLE             
+
+`define BUBBLE_SIZE 200     // size of array used for bubblesort
+
+`define SET_NUM 100        // program will run for SET_NUM times
+                            // (when BUBBLE is off, each time program is randomly generated)
+                            // (to avoid running bubblesort multiple times, set SET_NUM to 1 when
+                            //  BUBBLE is on)
+`define DRAM_INIT_RANGE 32  // data DRAM will be initialized to [-DRAM_INIT_RANGE+1, DRAM_INIT_RANGE-1]
+
+// ====================================================================================================
+
+`ifdef FUNC
+    `define MAX_LAT 2000
+`elsif PERF
+    `define MAX_LAT 100000
+`endif
+
+`ifdef RTL
+    `define PREFIX My_CPU
+`elsif GATE
+    `define PREFIX My_CPU
+`elsif CHIP
+    `define PREFIX My_CHIP
+`elsif POST
+    `define PREFIX My_CHIP
+`endif
+
+`include "../00_TESTBED/MEM_MAP_define.v"
+`include "../00_TESTBED/pseudo_DRAM_data.v"
+`include "../00_TESTBED/pseudo_DRAM_inst.v"
+
+module PATTERN(
+    clk,
+    rst_n,
+    IO_stall,
+
+    arid_s_inf,
+    araddr_s_inf,
+    arlen_s_inf,
+    arsize_s_inf,
+    arburst_s_inf,
+    arvalid_s_inf,
+    arready_s_inf, 
+
+    rid_s_inf,
+    rdata_s_inf,
+    rresp_s_inf,
+    rlast_s_inf,
+    rvalid_s_inf,
+    rready_s_inf,
+
+    awid_s_inf,
+    awaddr_s_inf,
+    awsize_s_inf,
+    awburst_s_inf,
+    awlen_s_inf,
+    awvalid_s_inf,
+    awready_s_inf,
+                    
+    wdata_s_inf,
+    wlast_s_inf,
+    wvalid_s_inf,
+    wready_s_inf,
+                    
+    bid_s_inf,
+    bresp_s_inf,
+    bvalid_s_inf,
+    bready_s_inf
+);
+
+//---------------------------------------------------------------------
+//   PORT DECLARATION          
+//---------------------------------------------------------------------
+parameter ID_WIDTH=4, DATA_WIDTH=16, ADDR_WIDTH=32, DRAM_NUMBER=2, WRIT_NUMBER=1;
+
+output reg clk;
+output reg rst_n;
+input IO_stall;
+
+// -----------------------------
+// axi read address channel 
+input  wire [  DRAM_NUMBER*ID_WIDTH-1:0] arid_s_inf;
+input  wire [DRAM_NUMBER*ADDR_WIDTH-1:0] araddr_s_inf;
+input  wire [         DRAM_NUMBER*7-1:0] arlen_s_inf;
+input  wire [         DRAM_NUMBER*3-1:0] arsize_s_inf;
+input  wire [         DRAM_NUMBER*2-1:0] arburst_s_inf;
+input  wire [           DRAM_NUMBER-1:0] arvalid_s_inf;
+output wire [           DRAM_NUMBER-1:0] arready_s_inf;
+// -----------------------------
+// axi read data channel 
+output wire [  DRAM_NUMBER*ID_WIDTH-1:0] rid_s_inf;
+output wire [DRAM_NUMBER*DATA_WIDTH-1:0] rdata_s_inf;
+output wire [         DRAM_NUMBER*2-1:0] rresp_s_inf;
+output wire [           DRAM_NUMBER-1:0] rlast_s_inf;
+output wire [           DRAM_NUMBER-1:0] rvalid_s_inf;
+input  wire [           DRAM_NUMBER-1:0] rready_s_inf;
+// -----------------------------
+// axi write address channel 
+input  wire [  WRIT_NUMBER*ID_WIDTH-1:0] awid_s_inf;
+input  wire [WRIT_NUMBER*ADDR_WIDTH-1:0] awaddr_s_inf;
+input  wire [         WRIT_NUMBER*3-1:0] awsize_s_inf;
+input  wire [         WRIT_NUMBER*2-1:0] awburst_s_inf;
+input  wire [         WRIT_NUMBER*7-1:0] awlen_s_inf;
+input  wire [           WRIT_NUMBER-1:0] awvalid_s_inf;
+output wire [           WRIT_NUMBER-1:0] awready_s_inf;
+// axi write data channel 
+input  wire [WRIT_NUMBER*DATA_WIDTH-1:0] wdata_s_inf;
+input  wire [           WRIT_NUMBER-1:0] wlast_s_inf;
+input  wire [           WRIT_NUMBER-1:0] wvalid_s_inf;
+output wire [           WRIT_NUMBER-1:0] wready_s_inf;
+// axi write response channel
+output wire [  WRIT_NUMBER*ID_WIDTH-1:0] bid_s_inf;
+output wire [         WRIT_NUMBER*2-1:0] bresp_s_inf;
+output wire [           WRIT_NUMBER-1:0] bvalid_s_inf;
+input  wire [           WRIT_NUMBER-1:0] bready_s_inf;
+// -----------------------------
+// axi write address channel 
+wire [              ID_WIDTH-1:0] inst_awid;
+wire [            ADDR_WIDTH-1:0] inst_awaddr;
+wire [                       2:0] inst_awsize;
+wire [                       1:0] inst_awburst;
+wire [                       6:0] inst_awlen;
+wire                              inst_awvalid;
+wire                              inst_awready;
+// axi write data channel 
+wire [            DATA_WIDTH-1:0] inst_wdata;
+wire                              inst_wlast;
+wire                              inst_wvalid;
+wire                              inst_wready;
+// axi write response channel
+wire [              ID_WIDTH-1:0] inst_bid;
+wire [                       1:0] inst_bresp;
+wire                              inst_bvalid;
+wire                              inst_bready;
+
+pseudo_DRAM_data dram_data (
+   .clk(clk),
+   .rst_n(rst_n),
+
+   .   awid_s_inf(awid_s_inf[3:0]),
+   . awaddr_s_inf(awaddr_s_inf[31:0]),
+   . awsize_s_inf(awsize_s_inf[2:0]),
+   .awburst_s_inf(awburst_s_inf[1:0]),
+   .  awlen_s_inf(awlen_s_inf[6:0]),
+   .awvalid_s_inf(awvalid_s_inf[0]),
+   .awready_s_inf(awready_s_inf[0]),
+
+   .  wdata_s_inf(wdata_s_inf[15:0]),
+   .  wlast_s_inf(wlast_s_inf[0]),
+   . wvalid_s_inf(wvalid_s_inf[0]),
+   . wready_s_inf(wready_s_inf[0]),
+
+   .    bid_s_inf(bid_s_inf[3:0]),
+   .  bresp_s_inf(bresp_s_inf[1:0]),
+   . bvalid_s_inf(bvalid_s_inf[0]),
+   . bready_s_inf(bready_s_inf[0]),
+
+   .   arid_s_inf(arid_s_inf[3:0]),
+   . araddr_s_inf(araddr_s_inf[31:0]),
+   .  arlen_s_inf(arlen_s_inf[6:0]),
+   . arsize_s_inf(arsize_s_inf[2:0]),
+   .arburst_s_inf(arburst_s_inf[1:0]),
+   .arvalid_s_inf(arvalid_s_inf[0]),
+   .arready_s_inf(arready_s_inf[0]), 
+
+   .    rid_s_inf(rid_s_inf[3:0]),
+   .  rdata_s_inf(rdata_s_inf[15:0]),
+   .  rresp_s_inf(rresp_s_inf[1:0]),
+   .  rlast_s_inf(rlast_s_inf[0]),
+   . rvalid_s_inf(rvalid_s_inf[0]),
+   . rready_s_inf(rready_s_inf[0]) 
+);
+
+pseudo_DRAM_inst dram_inst (
+   .clk(clk),
+   .rst_n(rst_n),
+
+   .   awid_s_inf(inst_awid),
+   . awaddr_s_inf(inst_awaddr),
+   . awsize_s_inf(inst_awsize),
+   .awburst_s_inf(inst_awburst),
+   .  awlen_s_inf(inst_awlen),
+   .awvalid_s_inf(inst_awvalid),
+   .awready_s_inf(inst_awready),
+  
+   .  wdata_s_inf(inst_wdata),
+   .  wlast_s_inf(inst_wlast),
+   . wvalid_s_inf(inst_wvalid),
+   . wready_s_inf(inst_wready),
+  
+   .    bid_s_inf(inst_bid),
+   .  bresp_s_inf(inst_bresp),
+   . bvalid_s_inf(inst_bvalid),
+   . bready_s_inf(inst_bready),
+
+   .   arid_s_inf(arid_s_inf[7:4]),
+   . araddr_s_inf(araddr_s_inf[63:32]),
+   .  arlen_s_inf(arlen_s_inf[13:7]),
+   . arsize_s_inf(arsize_s_inf[5:3]),
+   .arburst_s_inf(arburst_s_inf[3:2]),
+   .arvalid_s_inf(arvalid_s_inf[1]),
+   .arready_s_inf(arready_s_inf[1]), 
+
+   .    rid_s_inf(rid_s_inf[7:4]),
+   .  rdata_s_inf(rdata_s_inf[31:16]),
+   .  rresp_s_inf(rresp_s_inf[3:2]),
+   .  rlast_s_inf(rlast_s_inf[1]),
+   . rvalid_s_inf(rvalid_s_inf[1]),
+   . rready_s_inf(rready_s_inf[1]) 
+);
+
+//////////////////////////////////////////////////
+
+real cycle = `CYCLE_TIME;
+
+integer i;
+integer i_pat;
+
+//////////////////////////////////////////////////
+
+integer latency;
+integer total_latency = 0;
+
+//////////////////////////////////////////////////
+
+reg [15:0] golden_dram_data [0:16'h1FFE];
+reg [15:0] golden_dram_inst [0:16'h1FFE];
+reg [15:0] golden_reg       [0:15];
+
+reg [15:0] pc;
+
+//////////////////////////////////////////////////
+
+reg [15:0] golden_dram_data_backup [0:16'h1FFE];
+reg [15:0] golden_dram_inst_backup [0:16'h1FFE];
+
+//////////////////////////////////////////////////
+
+reg invalid;
+
+//////////////////////////////////////////////////
+
+integer pat_cnt = 0;
+
+integer add_cnt   = 0;
+integer sub_cnt   = 0;
+integer slt_cnt   = 0;
+integer mul_cnt   = 0;
+integer load_cnt  = 0;
+integer store_cnt = 0;
+integer beq_0_cnt = 0;
+integer beq_1_cnt = 0;
+integer det_cnt   = 0;
+
+//////////////////////////////////////////////////
+
+initial clk = 0;
+always #(cycle/2.0) clk = ~clk;
+
+initial begin
+    repeat (`SET_NUM)
+        main;
+    pass_task;
+end
+
+task main;
+begin
+    init_task;
+`ifdef BUBBLE
+    gen_bubble_dram_task;
+`else
+    gen_rand_dram_task;
+`endif
+
+    for (i = 16'h1000; i < 16'h2000; i += 2)
+        golden_dram_data_backup[i] = golden_dram_data[i];
+    
+    forever begin
+        sim_task(1'b1);
+        if (invalid)
+            break;
+    end
+
+    for (i = 16'h1000; i < 16'h2000; i += 2)
+        golden_dram_inst_backup[i] = golden_dram_inst[i];
+
+    reset_signal_task;
+
+    init_task;
+    for (i = 16'h1000; i < 16'h2000; i += 2) begin
+        golden_dram_data[i] = golden_dram_data_backup[i];
+        golden_dram_inst[i] = golden_dram_inst_backup[i];
+    end
+    set_dram_task;
+    dump_initial_dram_task;
+
+    for (i_pat = 0; ; i_pat += 1, pat_cnt += 1) begin
+        if (16'h1000 <= pc && pc < 16'h2000) begin
+            $display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            $display("pc = 0x%h, instruction = %b", pc, golden_dram_inst[pc]);
+        end
+
+        sim_task(1'b0);
+        if (invalid)
+            break;
+        
+        wait_io_stall_task;
+        print_reg_task;
+
+        check_reg_task;
+        $display("PASS REG");
+
+        check_dram_task;
+        $display("PASS DRAM");
+
+        $display("PASS PATTERN %1d, LATENCY %1d", i_pat, latency);
+
+        @(negedge clk);
+    end
+
+    dump_final_dram_task;
+end
+endtask
+
+//////////////////////////////////////////////////////////////////////
+
+function [15:0] correct_inst(input [15:0] inst, input [2:0] func_type);
+    case (func_type)
+        0: correct_inst = {3'b000, inst[12:1], 1'b0};
+        1: correct_inst = {3'b000, inst[12:1], 1'b1};
+        2: correct_inst = {3'b001, inst[12:1], 1'b0};
+        3: correct_inst = {3'b001, inst[12:1], 1'b1};
+        4: correct_inst = {3'b010, inst[12:0]};
+        5: correct_inst = {3'b011, inst[12:0]};
+        6: correct_inst = {3'b100, inst[12:5], 1'b0, inst[3:0]};
+        7: correct_inst = {3'b111, inst[12:0]};
+    endcase
+endfunction
+
+task regen(output [15:0] inst);
+begin
+    reg [15:0] inst_tmp;
+    reg [ 2:0] func_type;
+    assert(std::randomize(inst_tmp));
+    assert(std::randomize(func_type));
+    inst = correct_inst(inst_tmp, func_type);
+end
+endtask
+
+//////////////////////////////////////////////////////////////////////
+
+task reset_signal_task; 
+begin 
+    force clk = 1'b0;
+    rst_n = 1'b1;
+    #(100);
+    rst_n = 1'b0;
+    #(100);
+    if (IO_stall !== 1'b1)
+        $fatal(1, "FAIL: RESET");
+    rst_n = 1'b1;
+    #(100);
+    release clk;
+    @(posedge clk);
+    @(negedge clk);
+end 
+endtask
+
+task init_task;
+begin
+    for (i = 16'h1000; i < 16'h2000; i += 2) begin
+        golden_dram_data[i] = 0;
+        golden_dram_inst[i] = 0;
+    end
+
+    for (i = 0; i < 16; i += 1)
+        golden_reg[i] = 0;
+    
+    pc = 16'h1000;
+end
+endtask
+
+task gen_bubble_dram_task;
+begin
+    golden_dram_data[16'h1000] = 1;
+    golden_dram_data[16'h1002] = `BUBBLE_SIZE;
+    for (i = 0; i < `BUBBLE_SIZE; i += 1)
+        assert(std::randomize(golden_dram_data[16'h1004 + 2*i]));
+    
+    golden_dram_inst[16'h1000 + 2* 0] = 16'b0100000000100000;
+    golden_dram_inst[16'h1000 + 2* 1] = 16'b0100000001000001;
+    golden_dram_inst[16'h1000 + 2* 2] = 16'b0010001001001110;
+    golden_dram_inst[16'h1000 + 2* 3] = 16'b1000111000001110;
+    golden_dram_inst[16'h1000 + 2* 4] = 16'b0000001000000110;
+    golden_dram_inst[16'h1000 + 2* 5] = 16'b0010011001001110;
+    golden_dram_inst[16'h1000 + 2* 6] = 16'b1000111000001001;
+    golden_dram_inst[16'h1000 + 2* 7] = 16'b0000011000101001;
+    golden_dram_inst[16'h1000 + 2* 8] = 16'b0100011010100010;
+    golden_dram_inst[16'h1000 + 2* 9] = 16'b0100100011000010;
+    golden_dram_inst[16'h1000 + 2*10] = 16'b0010101011001110;
+    golden_dram_inst[16'h1000 + 2*11] = 16'b1000111000000010;
+    golden_dram_inst[16'h1000 + 2*12] = 16'b0110011011000010;
+    golden_dram_inst[16'h1000 + 2*13] = 16'b0110100010100010;
+    golden_dram_inst[16'h1000 + 2*14] = 16'b0000011000100110;
+    golden_dram_inst[16'h1000 + 2*15] = 16'b1000000000010101;
+    golden_dram_inst[16'h1000 + 2*16] = 16'b0000010000100101;
+    golden_dram_inst[16'h1000 + 2*17] = 16'b1000000000010000;
+    golden_dram_inst[16'h1000 + 2*18] = 16'b0000000000000000;
+end
+endtask
+
+task gen_rand_dram_task;
+begin
+    reg negate;
+
+    for (i = 16'h1000; i < 16'h2000; i += 2) begin
+        assert(std::randomize(golden_dram_data[i]));
+        assert(std::randomize(negate));
+
+        golden_dram_data[i] = golden_dram_data[i] % `DRAM_INIT_RANGE;
+        if (negate)
+            golden_dram_data[i] = ~golden_dram_data[i] + 16'd1;
+        
+        regen(golden_dram_inst[i]);
+    end
+end
+endtask
+
+task set_dram_task;
+    for (i = 16'h1000; i < 16'h2000; i += 2) begin
+        {dram_data.DRAM_r[i+1], dram_data.DRAM_r[i]} = golden_dram_data[i];
+        {dram_inst.DRAM_r[i+1], dram_inst.DRAM_r[i]} = golden_dram_inst[i];
+    end
+endtask
+
+task sim_task(input tamper);
+begin
+    reg [2:0] opcode;
+    reg [3:0] rs;
+    reg [3:0] rt;
+    reg [3:0] rd;
+    reg       func;
+    reg [4:0] imm;
+    reg [3:0] coeff_a;
+    reg [8:0] coeff_b;
+
+    reg [31:0] data_addr;
+
+    reg signed [127:0] A [0:3][0:3];
+    reg signed [127:0] temp;
+
+    invalid = 0;
+
+    forever begin
+        if (pc < 16'h1000 || pc >= 16'h2000) begin
+            invalid = 1;
+            $display("INFO: pc out of range (0x%h). stop.", pc);
+            break;
+        end
+
+        {opcode, rs, rt, rd, func} = golden_dram_inst[pc];
+        imm                        = {rd, func};
+        coeff_a                    = rs;
+        coeff_b                    = {rt, imm};
+
+        data_addr = {{{16{golden_reg[rs][15]}}, golden_reg[rs]} + {{27{imm[4]}}, imm}, 1'b0};
+        data_addr = data_addr + 32'h1000;
+
+        if ({opcode, func} == 4'b0000) begin
+            if (tamper == 0)
+                add_cnt += 1;
+            golden_reg[rd] = golden_reg[rs] + golden_reg[rt];
+        end else if ({opcode, func} == 4'b0001) begin
+            if (tamper == 0)
+                sub_cnt += 1;
+            golden_reg[rd] = golden_reg[rs] - golden_reg[rt];
+        end else if ({opcode, func} == 4'b0010) begin
+            if (tamper == 0)
+                slt_cnt += 1;
+            golden_reg[rd] = ($signed(golden_reg[rs]) < $signed(golden_reg[rt])) ? 1 : 0;
+        end else if ({opcode, func} == 4'b0011) begin
+            if (tamper == 0)
+                mul_cnt += 1;
+            golden_reg[rd] = golden_reg[rs] * golden_reg[rt];
+        end else if (opcode == 3'b010) begin
+            if (data_addr < 32'h1000 || data_addr >= 32'h2000) begin
+                if (tamper) begin
+                    $display("INFO: trying to regenerate instruction[0x%h]", pc);
+                    regen(golden_dram_inst[pc]);
+                    continue;
+                end else begin
+                    invalid = 1;
+                    $display("INFO: load out of range (0x%h). stop.", data_addr);
+                    break;
+                end
+            end
+            if (tamper == 0)
+                load_cnt += 1;
+            golden_reg[rt] = golden_dram_data[data_addr];
+        end else if (opcode == 3'b011) begin
+            if (data_addr < 32'h1000 || data_addr >= 32'h2000) begin
+                if (tamper) begin
+                    $display("INFO: trying to regenerate instruction[0x%h]", pc);
+                    regen(golden_dram_inst[pc]);
+                    continue;
+                end else begin
+                    invalid = 1;
+                    $display("INFO: store out of range (0x%h). stop.", data_addr);
+                    break;
+                end
+            end
+            if (tamper == 0)
+                store_cnt += 1;
+            golden_dram_data[data_addr] = golden_reg[rt];
+        end else if (opcode == 3'b100) begin
+            if (tamper == 0) begin
+                if (golden_reg[rs] == golden_reg[rt])
+                    beq_1_cnt += 1;
+                else
+                    beq_0_cnt += 1;
+            end
+            if (golden_reg[rs] == golden_reg[rt])
+                pc = pc + {{10{imm[4]}}, imm, 1'b0};
+        end else if (opcode == 3'b111) begin
+            if (tamper == 0)
+                det_cnt += 1;
+            A[0][0] = {{112{golden_reg[ 0][15]}}, golden_reg[ 0]};
+            A[0][1] = {{112{golden_reg[ 1][15]}}, golden_reg[ 1]};
+            A[0][2] = {{112{golden_reg[ 2][15]}}, golden_reg[ 2]};
+            A[0][3] = {{112{golden_reg[ 3][15]}}, golden_reg[ 3]};
+            A[1][0] = {{112{golden_reg[ 4][15]}}, golden_reg[ 4]};
+            A[1][1] = {{112{golden_reg[ 5][15]}}, golden_reg[ 5]};
+            A[1][2] = {{112{golden_reg[ 6][15]}}, golden_reg[ 6]};
+            A[1][3] = {{112{golden_reg[ 7][15]}}, golden_reg[ 7]};
+            A[2][0] = {{112{golden_reg[ 8][15]}}, golden_reg[ 8]};
+            A[2][1] = {{112{golden_reg[ 9][15]}}, golden_reg[ 9]};
+            A[2][2] = {{112{golden_reg[10][15]}}, golden_reg[10]};
+            A[2][3] = {{112{golden_reg[11][15]}}, golden_reg[11]};
+            A[3][0] = {{112{golden_reg[12][15]}}, golden_reg[12]};
+            A[3][1] = {{112{golden_reg[13][15]}}, golden_reg[13]};
+            A[3][2] = {{112{golden_reg[14][15]}}, golden_reg[14]};
+            A[3][3] = {{112{golden_reg[15][15]}}, golden_reg[15]};
+
+            temp = 
+                 A[0][0] * A[1][1] * A[2][2] * A[3][3] + A[0][0] * A[1][2] * A[2][3] * A[3][1] + A[0][0] * A[1][3] * A[2][1] * A[3][2]
+               - A[0][0] * A[1][3] * A[2][2] * A[3][1] - A[0][0] * A[1][2] * A[2][1] * A[3][3] - A[0][0] * A[1][1] * A[2][3] * A[3][2]
+               - A[0][1] * A[1][0] * A[2][2] * A[3][3] - A[0][2] * A[1][0] * A[2][3] * A[3][1] - A[0][3] * A[1][0] * A[2][1] * A[3][2]
+               + A[0][3] * A[1][0] * A[2][2] * A[3][1] + A[0][2] * A[1][0] * A[2][1] * A[3][3] + A[0][1] * A[1][0] * A[2][3] * A[3][2]
+               + A[0][1] * A[1][2] * A[2][0] * A[3][3] + A[0][2] * A[1][3] * A[2][0] * A[3][1] + A[0][3] * A[1][1] * A[2][0] * A[3][2]
+               - A[0][3] * A[1][2] * A[2][0] * A[3][1] - A[0][2] * A[1][1] * A[2][0] * A[3][3] - A[0][1] * A[1][3] * A[2][0] * A[3][2]
+               - A[0][1] * A[1][2] * A[2][3] * A[3][0] - A[0][2] * A[1][3] * A[2][1] * A[3][0] - A[0][3] * A[1][1] * A[2][2] * A[3][0]
+               + A[0][3] * A[1][2] * A[2][1] * A[3][0] + A[0][2] * A[1][1] * A[2][3] * A[3][0] + A[0][1] * A[1][3] * A[2][2] * A[3][0];
+            
+            temp = (temp >>> {coeff_a, 1'b0});
+            temp = temp + {{119{1'b0}}, coeff_b};
+            
+            if (temp > 32767)
+                golden_reg[0] = 16'h7FFF;
+            else if (temp < -32768)
+                golden_reg[0] = 16'h8000;
+            else
+                golden_reg[0] = temp[15:0];
+        end else begin
+            $fatal(1, "ERROR: INVALID INSTRUCTION (%b)", golden_dram_inst[pc]);
+        end
+
+        pc += 2;
+        break;
+    end
+end
+endtask
+
+task wait_io_stall_task;
+begin
+    latency = 0;
+    while (IO_stall !== 1'b0) begin
+        if (latency == `MAX_LAT)
+            $fatal(1, "FAIL: LATENCY");
+        @(negedge clk);
+        latency = latency + 1;
+    end
+    total_latency = total_latency + latency;
+end
+endtask
+
+task print_reg_task;
+begin
+    $display("r0  = %6d, r1  = %6d, r2  = %6d, r3  = %6d", $signed(golden_reg[ 0]), $signed(golden_reg[ 1]), $signed(golden_reg[ 2]), $signed(golden_reg[ 3]));
+    $display("r4  = %6d, r5  = %6d, r6  = %6d, r7  = %6d", $signed(golden_reg[ 4]), $signed(golden_reg[ 5]), $signed(golden_reg[ 6]), $signed(golden_reg[ 7]));
+    $display("r8  = %6d, r9  = %6d, r10 = %6d, r11 = %6d", $signed(golden_reg[ 8]), $signed(golden_reg[ 9]), $signed(golden_reg[10]), $signed(golden_reg[11]));
+    $display("r12 = %6d, r13 = %6d, r14 = %6d, r15 = %6d", $signed(golden_reg[12]), $signed(golden_reg[13]), $signed(golden_reg[14]), $signed(golden_reg[15]));
+end
+endtask
+
+task check_reg_task;
+begin
+    if ((`PREFIX.core_r0 !== golden_reg[0]) || (`PREFIX.core_r8  !== golden_reg[ 8]) ||
+        (`PREFIX.core_r1 !== golden_reg[1]) || (`PREFIX.core_r9  !== golden_reg[ 9]) ||
+        (`PREFIX.core_r2 !== golden_reg[2]) || (`PREFIX.core_r10 !== golden_reg[10]) ||
+        (`PREFIX.core_r3 !== golden_reg[3]) || (`PREFIX.core_r11 !== golden_reg[11]) ||
+        (`PREFIX.core_r4 !== golden_reg[4]) || (`PREFIX.core_r12 !== golden_reg[12]) ||
+        (`PREFIX.core_r5 !== golden_reg[5]) || (`PREFIX.core_r13 !== golden_reg[13]) ||
+        (`PREFIX.core_r6 !== golden_reg[6]) || (`PREFIX.core_r14 !== golden_reg[14]) ||
+        (`PREFIX.core_r7 !== golden_reg[7]) || (`PREFIX.core_r15 !== golden_reg[15])) begin
+        $display("FAIL: REG INCORRECT");
+        $display("golden r0  = %6d, your r0  = %6d", $signed(golden_reg[ 0]), `PREFIX.core_r0 );
+        $display("golden r1  = %6d, your r1  = %6d", $signed(golden_reg[ 1]), `PREFIX.core_r1 );
+        $display("golden r2  = %6d, your r2  = %6d", $signed(golden_reg[ 2]), `PREFIX.core_r2 );
+        $display("golden r3  = %6d, your r3  = %6d", $signed(golden_reg[ 3]), `PREFIX.core_r3 );
+        $display("golden r4  = %6d, your r4  = %6d", $signed(golden_reg[ 4]), `PREFIX.core_r4 );
+        $display("golden r5  = %6d, your r5  = %6d", $signed(golden_reg[ 5]), `PREFIX.core_r5 );
+        $display("golden r6  = %6d, your r6  = %6d", $signed(golden_reg[ 6]), `PREFIX.core_r6 );
+        $display("golden r7  = %6d, your r7  = %6d", $signed(golden_reg[ 7]), `PREFIX.core_r7 );
+        $display("golden r8  = %6d, your r8  = %6d", $signed(golden_reg[ 8]), `PREFIX.core_r8 );
+        $display("golden r9  = %6d, your r9  = %6d", $signed(golden_reg[ 9]), `PREFIX.core_r9 );
+        $display("golden r10 = %6d, your r10 = %6d", $signed(golden_reg[10]), `PREFIX.core_r10);
+        $display("golden r11 = %6d, your r11 = %6d", $signed(golden_reg[11]), `PREFIX.core_r11);
+        $display("golden r12 = %6d, your r12 = %6d", $signed(golden_reg[12]), `PREFIX.core_r12);
+        $display("golden r13 = %6d, your r13 = %6d", $signed(golden_reg[13]), `PREFIX.core_r13);
+        $display("golden r14 = %6d, your r14 = %6d", $signed(golden_reg[14]), `PREFIX.core_r14);
+        $display("golden r15 = %6d, your r15 = %6d", $signed(golden_reg[15]), `PREFIX.core_r15);	
+        $finish;
+    end
+end
+endtask
+
+task check_dram_task;
+begin
+    for (i = 16'h1000; i < 16'h2000; i += 2) begin
+        if ({dram_data.DRAM_r[i+1], dram_data.DRAM_r[i]} !== golden_dram_data[i]) begin
+            $display("FAIL: DRAM INCORRECT @ 0x%4h", i);
+            $display("golden = %1d, your = %1d", $signed(golden_dram_data[i]), $signed({dram_data.DRAM_r[i+1], dram_data.DRAM_r[i]}));
+            $finish;
+        end
+    end
+end
+endtask
+
+task dump_initial_dram_task;
+begin
+    integer initial_dram_data_fd;
+    integer initial_dram_inst_fd;
+    initial_dram_data_fd = $fopen("initial_dram_data.txt", "w");
+    initial_dram_inst_fd = $fopen("initial_dram_inst.txt", "w");
+    for (i = 16'h1000; i < 16'h2000; i += 2) begin
+        $fwrite(initial_dram_data_fd, "@%4h\n", i);
+        $fwrite(initial_dram_inst_fd, "@%4h\n", i);
+        $fwrite(initial_dram_data_fd, "%1d\n", $signed({dram_data.DRAM_r[i+1], dram_data.DRAM_r[i]}));
+        $fwrite(initial_dram_inst_fd, "%b\n", {dram_inst.DRAM_r[i+1], dram_inst.DRAM_r[i]});
+    end
+    $fclose(initial_dram_data_fd);
+    $fclose(initial_dram_inst_fd);
+end
+endtask
+
+task dump_final_dram_task;
+begin
+    integer final_dram_data_fd;
+    final_dram_data_fd = $fopen("final_dram_data.txt", "w");
+    for (i = 16'h1000; i < 16'h2000; i += 2)
+        $fwrite(final_dram_data_fd, "%1d\n", $signed({dram_data.DRAM_r[i+1], dram_data.DRAM_r[i]}));
+    $fclose(final_dram_data_fd);
+end
+endtask
+
+task pass_task;
+begin
+    $display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    $display("Passed patterns = %1d", pat_cnt);
+    $display("Number of executed instructions:");
+    $display("    ADD: %1d"             , add_cnt);
+    $display("    SUB: %1d"             , sub_cnt);
+    $display("    SLT: %1d"             , slt_cnt);
+    $display("    MUL: %1d"             , mul_cnt);
+    $display("    LOAD: %1d"            , load_cnt);
+    $display("    STORE: %1d"           , store_cnt);
+    $display("    BEQ (rs != rt): %1d"  , beq_0_cnt);
+    $display("    BEQ (rs == rt): %1d"  , beq_1_cnt);
+    $display("    DET: %1d"             , det_cnt);
+    $display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    $display("Congratulations!");
+    $display("Your execution cycles = %1d cycles", total_latency);
+    $display("Your clock period = %.1f ns", cycle);
+    $display("Total Latency = %.1f ns", total_latency * cycle);
+    $display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    $finish;
+end 
+endtask
+
+endmodule
