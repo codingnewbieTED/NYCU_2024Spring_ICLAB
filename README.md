@@ -37,3 +37,6 @@ iclab的精隨就是思考問題+設計架構，verilog實現方法就是基本�
 2. 組隊    
 找認識的一起討論架構。架構就是要一起討論+trial and error試出來的，自己硬幹可能有很多盲點，然後這個東西又占performance至少        
 70趴吧。並且有人交換pattern驗證也是非常重要的，我自己也有找人Share pattern，雖然沒有找到夥伴討論架構有點遺憾。    
+3. 設計大致流程
+題目看熟直到快背起來，寫pattern。拿紙筆寫出要做的運算(如conv,*+等等)，開始分配每CYCLE要做的事(schedule)、FSM,counter控制data流動。刻design，運用
+shift reg、MUX這兩個組合技把deisgn刻出來，然後瘋狂優化v1,v2,v3,v4把別人捲下去XD
