@@ -6,7 +6,7 @@ PREFIX & INFIX
 
 心得:   
 1.
-習慣很可怕，不要依賴SPEC的OUTPUT大小去無腦開REG，結果這次兩個MODE，95是MODE2需要的，    
+習慣很可怕，不要依賴SPEC的OUTPUT大小去無腦開REG，結果這次兩個MODE，95bit是MODE2需要的，    
 mode1根本不需要開那麼大，開95就是一個大陷阱直接讓你不能合成    
 2.    
 最近OT題目都是資料結構? 說好的IP、三角形呢XD 去年是stack判斷能不能排序成功，今年是兩個mode    
