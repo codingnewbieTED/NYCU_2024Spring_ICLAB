@@ -31,7 +31,7 @@ iclab的精隨就是思考問題+設計架構，verilog實現方法就是基本�
 不踏實，全部自己幹了。    
 
 1. 先修、自學    
-我上學期修DIC才開始接觸verilog，自學YT張老的DCS課程並徵題目作業練習，旁聽ICLAB。大概期中練完DCS後開始練2023F的ICLAB2,4,5(還自己寫pseudoSRAM)
+本人固態仔，我上學期修DIC才開始接觸verilog，自學YT張老的DCS課程並徵題目作業練習，旁聽ICLAB。大概期中練完DCS後開始練2023F的ICLAB2,4,5(還自己寫pseudoSRAM)
 、2021S的lab2(string match machine)、lab3(數獨，遞迴FSM)，超級感謝DIC工作站，我在上面練好多東西XD。寒假寫了一點OOP、leetcode。因為我大學只修過羅設+旁聽計組，其他課程只能自己亂補一補了，只能說努力一點沒基礎還是能通過ICLAB的，建議先修: 邏設,DCS,CA, VLSI or DIC,其他: 資結、DSP、演算法?        
 2. 組隊    
 找認識的一起討論架構。架構就是要一起討論+trial and error試出來的，自己硬幹可能有很多盲點(閉門造車就是我)，然後這個東西又占performance至少
