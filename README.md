@@ -11,7 +11,7 @@ ICLAB117
 -------------------------
 |  下半學期    | Lab07  | Lab08 | Lab09 | Bonus | Lab11 | Lab12 | LAB13|   FINAL PROJECT  | FINAL EXAM |
 | ------------|:------:|:-----:|:-----:|:-----:|:-----:|:-----:|:--------------:|:-----:|:-------:|
-| Difficulty  |2/5|2/5|2/5|1/5|3/5|1/5|1/5|||||
+| Difficulty  |2/5|2/5|2/5|1/5|3/5|1/5|1/5|5/5||||
 | Rank        |1/95|16/94|38/91|NA|2/86|2/?|NA|||||
 | Score       |100|95.16|95.89|100|99.65|99.67|100|||||
 | 備註  |備[2]|||||||||||
@@ -23,3 +23,6 @@ ICLAB117
 
 github README寫法:https://gist.github.com/billy3321/1001749662c370887c63bb30f26c9e6e    
 成績公告: https://docs.google.com/spreadsheets/d/1yCiL5xkXyYOusq58-Ti7CFu0g_mKm8TVBM2_Krw-6a4/edit#gid=1576172777    
+
+
+-------------------
