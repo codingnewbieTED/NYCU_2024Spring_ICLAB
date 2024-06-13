@@ -42,7 +42,7 @@ iclab的精隨就是思考問題+設計架構，verilog實現方法就是基本�
 data流動等等架構。最後運用shift reg、MUX這兩個組合技+IP運算等把deisgn刻出來，然後瘋狂優化v1,v2,v3,v4把別人捲下去XD保持24小時都在想題目的狀態，睡夢中都要想著優化。
 
 4.  經驗談，關於架構      
-      ICLAB的performance就是一門trade-off的藝術(PPA只能選兩個)，組隊的好處就是大家可以分享area,latency,CT這三條路誰的效能最好，進而找到最好的架構方向。以下個人單幹後的經驗，如果是CT固定的lab(如lab2,lab7,lab11)，不用想直接搶latency(FSM判斷都用n_state)，做完再把運算前後調整(Input delay那半個CYCLE也要試試看)，進而讓每個cycle的loading差不多，面積有可能大幅下降。 然後三個自由度全部open的lab，先試想latency可以壓到多低，若可以弄到個位數，還是建議先搶latency(如Lab5,Lab6)，你latency能壓到1cycle，面積、CT比別人大一點完全沒差、而且latency小通常比較好scheduling，寫起來比較輕鬆。
+      ICLAB的performance就是一門trade-off的藝術，組隊的好處就是大家可以分享area,latency,CT這三條路誰的效能最好，進而找到最好的架構方向。以下個人單幹後的經驗，如果是CT固定的lab(如lab2,lab7,lab11)，不用想直接搶latency(FSM判斷都用n_state)，做完再把運算前後調整(Input delay那半個CYCLE也要試試看)，進而讓每個cycle的loading差不多，面積有可能大幅下降。 然後三個自由度全部open的lab，先試想latency可以壓到多低，若可以弄到個位數，還是建議先搶latency(如Lab5,Lab6)，你latency能壓到1cycle，面積、CT比別人大一點完全沒差、而且latency小通常比較好scheduling，寫起來比較輕鬆。
                 
      再來若是較大的latency design，尤其有把DRAM latency算進來的那種，先壓CT，把運算pipeline(CT下去,area也有機會變小，如lab4共用很肥的IP)，判斷if else裡面都用REG起來的control signal，降低critical path。除非lab的運算簡單到只有少數乘加法器(lab7,lab8)或是MUX(lab2,MP)，這時可以先往Area方向去思考，如多開reg幫助判斷(這部分要trial and error)、把運算共用(基本)、訊號簡化(lab8全部丟到bridge去算等)、shiftreg(lab7)。
                 
