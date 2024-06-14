@@ -44,6 +44,6 @@ data流動等等架構。最後運用shift reg、MUX這兩個組合技+IP運算�
 4.  經驗談，關於架構      
       ICLAB的performance就是一門trade-off的藝術，組隊的好處就是大家可以分享area,latency,CT這三條路誰的效能最好，進而找到最好的架構方向。以下個人的經驗，如果是CT固定的lab(如lab2,lab7,lab11)，不用想直接搶latency(FSM判斷都用n_state)，做完再把運算前後調整(Input delay那半個CYCLE也要試試看)，進而讓每個cycle的loading差不多，面積有可能大幅下降。 然後三個自由度全部open的lab，先試想latency可以壓到多低，若可以弄到個位數，還是建議先搶latency(如Lab5,Lab6)，你latency能壓到1cycle，面積、CT比別人大一點完全沒差、而且latency小通常比較好scheduling，寫起來比較輕鬆。
                 
-     再來若是較大的latency design，尤其有把DRAM latency算進來的那種，先壓CT，把運算pipeline，判斷if else裡面都用REG起來的control signal，降低critical path。除非lab的運算簡單到只有少數乘加法器(lab7,lab8)或是MUX(lab2,MP)，因為CP很小大家的CT都差不多，這時可以先往Area方向去思考，如多開reg幫助判斷(這部分要trial and error)、把運算共用、訊號簡化(lab8全部丟到bridge去算等)。
+     再來若是較大的latency design，尤其有把DRAM latency算進來的那種，先壓CT，把運算pipeline，判斷if else裡面都用REG起來的control signal，降低critical path。除非lab的運算簡單到只有少數乘加法器(lab7,lab8)或是MUX(lab2,MP)，因為CP很小大家的CT都差不多，這時可以先往Area方向去思考，如多開reg幫助判斷(這部分要trial and error)、把運算共用、CP(均衡一點)、訊號簡化(lab8全部丟到bridge去算等)。
                 
       總結，先摸一下題目的性質，思考哪條路優化空間最大。找到方向再來就是配合演算法、決定要開的乘法加法除法器了。想拚performance就是這樣，要試試看不同架構然後最後豁然開朗知道這題關鍵在哪，久而久之架構能力、經驗才能慢慢累積
