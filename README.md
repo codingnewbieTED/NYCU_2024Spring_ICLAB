@@ -20,7 +20,7 @@
 備[1]:
 感謝LAB5廖助教，因為我.v和.db SRAM命名不一樣導致02合成Script吃不到db黨，無法合成差點2DE，最後算NAMING ERROR只扣5分，謝謝~
 提醒:script會直接把filelist裡面.v砍掉換成_WC.db去吃db黨跑02，所以名子不一樣、或沒有_WC都會吃不到喔，後面lab12,FP都是這樣。    
-備[2]: 5/8 有上台分享5分鐘, + 20 分XD。 ppt有放上來
+備[2]: 5/8 有上台分享5分鐘CDC。 ppt有放上來
 
 github README寫法:https://gist.github.com/billy3321/1001749662c370887c63bb30f26c9e6e    
 成績公告: https://docs.google.com/spreadsheets/d/1yCiL5xkXyYOusq58-Ti7CFu0g_mKm8TVBM2_Krw-6a4/edit#gid=1576172777    
