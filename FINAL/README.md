@@ -13,7 +13,8 @@
 1. 降cycletime，大的運算如乘法器用Pipeline IP，並且SRAM出來的data都要接DFF，SRAM delay超大。    
 2. SRAM大小，我知道去年bestcode instr開256、data 128，但我不想再抄別人架構了，就開兩個128輕鬆寫，latency佛系了。
 3. 最極致的架構，MIPs 5stage CPU，要有hazard detect,forward,beq flush,cache miss時全部stall等等判定，甚至BHT、    
-   Reservation center...，學的不少但不好寫。      
+   Reservation center...，學的不少但不好寫。
+            
 小抱怨:因為PERF為(latency*cycle)^3*area_core，我M指令成法器開滿多的，結果M指令助教pattern只有26個==扣掉M指令我面積17萬，加了Mtype 44萬，然後整個pattern 指令集M指令只占26/900，我覺得這比例偏誇張
 
 APR: 我覺得這次反而花比較多時間在驗證(pattern真的好難寫)和APR上。APR做出來，06SRAM可能還是會有timing(hold)的問題，    
