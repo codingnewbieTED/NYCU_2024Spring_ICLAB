@@ -18,12 +18,10 @@
     assign encoder_exist_list_2 = encoder_table[out_addr_sort_2[7:4]] | encoder_table[out_addr_sort_2[3:0]] ;    
 然後for回圈去看哪個bit會是1，depth+1;    
 node 也是for迴圈判斷encoder_table[out_addr_sort_1[7:4]  node就+1  ;    encoder_table[out_addr_sort_1[3:0]] 左方加0。    
-
-performance: Area:42987.873435  Latency:4   Clk:7.5   
-(高手:area:33322, Latency:7 CLK:4.5 應該也是insertion sort，只是我去槍latency一個cycle塞兩個insertion sort，他Performance比我好)    
+ 
 
 心得:    
-一開始擔心軟體的寫法 matrix[reg]到底會部會錯(因為LAB2這樣寫就出現問題)。 後來直接這樣用是可以的，排序後元素的index一定是變數阿，只能這樣      
+一開始擔心軟體的寫法 matrix[reg]到底會部會錯(因為LAB2這樣寫就出現問題)。 後來直接這樣用是可以的，排序後元素的index一定是變數阿，只能這樣
 mux後for迴圈爆開去紀錄node的質和深度。      
 
-BTW 沒修過資料結構，最關鍵需要再開一個表紀錄node包含的元素(encode_table)，我卡好久><
+BTW 這題很偏資工練習題吧，沒修過資料結構，最關鍵需要再開一個表紀錄node包含的元素(encode_table)，我卡好久><
